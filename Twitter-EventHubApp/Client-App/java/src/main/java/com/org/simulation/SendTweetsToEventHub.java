@@ -2,6 +2,7 @@ package com.org.simulation;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -24,15 +25,15 @@ import twitter4j.conf.ConfigurationBuilder;
 public class SendTweetsToEventHub {
 
 	// Replace values below with real configurations
-	final private static String twitterConsumerKey = "19boShujUPEf88PoYWeYVZp33";
-	final private static String twitterConsumerSecret = "QNEMkVurwpgcaTo3zQGsszfc1DYYTepnEpkX63CCOIDfMbVLQU";
-	final private static String twitterOauthAccessToken = "3031481257-9PZis7AVEf78eV74c1l2kvYe6rFuANZiBt0xfF9";
-	final private static String twitterOauthTokenSecret = "w7ktYZlBZmULObXTKSSaYCinDnIo0Qva1VH6OEvpzSsbI";
+	final private static String twitterConsumerKey = "Hbn0ISayL2SZKu8hn7VKXWoII";
+	final private static String twitterConsumerSecret = "FJcWqAeGZ0fTnAJfd2NfOAW98qE0WwhToB74yM1yfjhCxAVGjH";
+	final private static String twitterOauthAccessToken = "1322874566960709636-lb6RbAQgutNd4Ck5AI5ewjRBopXVx1";
+	final private static String twitterOauthTokenSecret = "2iGnXulknfSjrxV6wh3pA38ycLZvnJ1HwJixKITNzycxl";
 	
-	final private static String namespaceName = "eventhubnamespacesample";
-	final private static String eventHubName = "eventhubsample";
+	final private static String namespaceName = "twitter-eventhub";
+	final private static String eventHubName = "twitter-eventhub";
 	final private static String sasKeyName = "manage";
-	final private static String sasKey = "+bBOu6BJ9v/VX+p5ZlK7GapXs27nml4XE+UpZGjBpAA=";
+	final private static String sasKey = "bbtEQLj7+ukD0wrllNCURPrsQBN+val4g6euQaDEdQY=";
 	private static CompletableFuture<EventHubClient> eventHubClient;
 
 	public static void main(String[] args) 
@@ -61,9 +62,9 @@ public class SendTweetsToEventHub {
 		Twitter twitter = twitterFactory.getInstance();
 
 		// Getting tweets with keyword "Azure" and sending them to the Event Hub in realtime!
-		Query query = new Query(" #Azure ");
+		Query query = new Query(" #HochschuleHeilbronn ");
 		query.setCount(100);
-		query.lang("en");
+		query.lang("de");
 		boolean finished = false;
 		while (!finished) {
 			QueryResult result = twitter.search(query);
@@ -82,7 +83,7 @@ public class SendTweetsToEventHub {
 
 	private static void sendEvent(String message, long delay) throws InterruptedException, UnsupportedEncodingException, ExecutionException {
 		Thread.sleep(delay);
-		EventData messageData = EventData.create(message.getBytes("UTF-8"));
+		EventData messageData = EventData.create(message.getBytes(StandardCharsets.UTF_8));
 		eventHubClient.get().send(messageData);
 		System.out.println("Sent event: " + message + "\n");
 
