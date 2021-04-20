@@ -62,7 +62,7 @@ public class SendTweetsToEventHub {
 		Twitter twitter = twitterFactory.getInstance();
 
 		// Getting tweets with keyword "Azure" and sending them to the Event Hub in realtime!
-		Query query = new Query(" #HochschuleHeilbronn ");
+		Query query = new Query(" #HochschuleHeilbronn #Corona");
 		query.setCount(100);
 		query.lang("de");
 		boolean finished = false;
