@@ -62,17 +62,28 @@ public class SendTweetsToEventHub {
 		Twitter twitter = twitterFactory.getInstance();
 
 		// Getting tweets with keyword "Azure" and sending them to the Event Hub in realtime!
-		Query query = new Query(" #HochschuleHeilbronn #Corona");
+		Query query = new Query(" #Azure ");
+		Query query1 = new Query(" Microsoft" );
 		query.setCount(100);
-		query.lang("de");
+		query1.setCount(100);
+		query.lang("en");
+		query1.lang("en");
 		boolean finished = false;
 		while (!finished) {
 			QueryResult result = twitter.search(query);
+			QueryResult result2 = twitter.search(query1);
 			List<Status> statuses = result.getTweets();
+			List<Status> statuses2 = result2.getTweets();
 			long lowestStatusId = Long.MAX_VALUE;
 			for(Status status:statuses){
 				if(!status.isRetweet()){
-					sendEvent(status.getText(), 5000);
+					sendEvent(status.getText(), 500);
+				}
+				lowestStatusId = Math.min(status.getId(), lowestStatusId);
+			}
+			for(Status status:statuses2){
+				if(!status.isRetweet()){
+					sendEvent(status.getText(), 500);
 				}
 				lowestStatusId = Math.min(status.getId(), lowestStatusId);
 			}
